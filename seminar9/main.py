@@ -11,11 +11,13 @@ def draw_angry_man(screen, x, y, r):
     circle(screen, RED, (x - 0.4 * r, y - 0.4 * r), r / 4)
     circle(screen, BLACK, (x - 0.4 * r, y - 0.4 * r), r / 4, 1)
     circle(screen, BLACK, (x - 0.4 * r, y - 0.4 * r), r /10)
-    polygon(screen, BLACK, [(x - r / 10, y - r * 0.55), (x - r * 0.65, y - r * 0.75), (x - r * 0.6, y - r * 0.8), (x - r / 10, y - 0.6 * r)])
+    polygon(screen, BLACK, [(x - r / 10, y - r * 0.55), (x - r * 0.65, y - r * 0.75),
+            (x - r * 0.6, y - r * 0.8), (x - r / 10, y - 0.6 * r)])
     circle(screen, RED, (x + 0.4 * r, y - 0.4 * r), r / 5)
     circle(screen, BLACK, (x + 0.4 * r, y - 0.4 * r), r / 5, 1)
     circle(screen, BLACK, (x + 0.4 * r, y - 0.4 * r), r / 10)
-    polygon(screen, BLACK, [(x + 0.2 * r, y - 0.55 * r), (x + 0.6 * r,y-0.7 * r), (x + 0.6 * r, y - 0.75 * r), (x + 0.2 * r, y - 0.6 * r)])
+    polygon(screen, BLACK, [(x + 0.2 * r, y - 0.55 * r), (x + 0.6 * r,y-0.7 * r),
+            (x + 0.6 * r, y - 0.75 * r), (x + 0.2 * r, y - 0.6 * r)])
 
 class Game:
     balls = {}
@@ -31,7 +33,7 @@ class Game:
     def start(self):
         finished = False
         while not finished:
-            clock.tick(FPS)
+            self.clock.tick(FPS)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     finished = True
@@ -45,25 +47,28 @@ class Game:
 
     def render_balls(self, delta_time):
         for ball in self.balls.values():
-            ball.x, ball.y = ball.x + ball.velocity_x*delta_time, ball.y + ball.velocity_y*delta_time
+            ball.x, ball.y = ball.x + ball.velocity_x * delta_time, ball.y + ball.velocity_y * delta_time
             ball.is_on_edge()
             ball.draw(self.screen)  
                 
     def render_score(self):
         score_text = self.font_style.render(f'Score: {self.score}', False,(255, 255, 255))
-        self.screen.blit(score_text,(10,50))
+        self.screen.blit(score_text, (10, 50))
 
     def new_ball(self, class_id):
         if class_id == 0:
-            self.balls[self.id_counter] =  Ball(randint(100,WIDTH - 100), randint(100,HEIGHT-100),random()-0.5,random()-0.5, randint(30,50),  COLORS[randint(0, 5)], self.id_counter, 1500)
+            self.balls[self.id_counter] =  Ball(randint(100, WIDTH - 100), randint(100, HEIGHT - 100),
+                                                random() - 0.5, random() - 0.5, randint(30, 50),  COLORS[randint(0, 5)],
+                                                self.id_counter, 1500)
         elif class_id == 1:
-            self.balls[self.id_counter] =  Angry_ball(randint(100,WIDTH - 100), randint(100,HEIGHT-100),(random()-0.5)*3,(random()-0.5)*3, randint(30,50),  COLORS[randint(0, 5)], self.id_counter, 1000)
-        self.id_counter+=1
+            self.balls[self.id_counter] =  Angry_ball(randint(100, WIDTH - 100), randint(100, HEIGHT - 100),
+                                                    (random() - 0.5) * 3,(random() - 0.5) * 3, randint(30, 50),
+                                                    COLORS[randint(0, 5)], self.id_counter, 1000)
+        self.id_counter += 1
 
     def delete_ball(self, id):
         self.balls.pop(id)
 
-    
     def add_time(self, delta_time):
         to_delete = []
         for ball in self.balls.values():
@@ -86,8 +91,8 @@ class Game:
     def is_click_on_ball(self, position_x, position_y):
         to_delete = []
         for ball in self.balls.values():
-            if (position_x - ball.x)**2 + (position_y - ball.y)**2 <= ball.r**2:
-                self.score+= ball.score
+            if (position_x - ball.x) ** 2 + (position_y - ball.y) ** 2 <= ball.r ** 2:
+                self.score +=  ball.score
                 to_delete.append(ball.id)
         for id in to_delete:
             self.delete_ball(id)
@@ -113,10 +118,10 @@ class Ball:
     def is_on_edge(self):
         if (self.x + self.r > WIDTH):
             self.x = WIDTH - self.r        
-            self.change_velocity(-self.velocity_x*(random() + 0.5), self.velocity_y * (random() - 0.5)*2)
+            self.change_velocity(-self.velocity_x*(random() + 0.5), self.velocity_y * (random() - 0.5) * 2)
         elif (self.x - self.r < 0):
             self.x = self.r
-            self.change_velocity(-self.velocity_x*(random() + 0.5), self.velocity_y * (random() - 0.5))
+            self.change_velocity(-self.velocity_x*(random() + 0.5), self.velocity_y * (random() - 0.5) * 2)
         if (self.y + self.r > HEIGHT):
             self.y = HEIGHT - self.r
             self.change_velocity(self.velocity_x*(random() - 0.5) * 2, -self.velocity_y*(random() + 0.5))
@@ -136,8 +141,8 @@ class Angry_ball(Ball):
     type = 'Angry_ball'
 
     def change_direction(self):
-        self.velocity_x += self.velocity_x*(random()-0.5) + (random() - 0.5)
-        self.velocity_y += self.velocity_y*(random()-0.5) + (random() - 0.5)
+        self.velocity_x += self.velocity_x * (random() - 0.5) + (random() - 0.5)
+        self.velocity_y += self.velocity_y*(random() - 0.5) + (random() - 0.5)
         self.timer = 0
 
     def draw(self, screen):
@@ -151,7 +156,12 @@ def init():
     clock = pygame.time.Clock()
     return (screen, font_style, clock)
 
-screen, font_style, clock = init()
-game = Game(screen, clock, 500, font_style)
-game.start()
-pygame.quit()
+def main():
+    screen, font_style, clock = init()
+    game = Game(screen, clock, 500, font_style)
+    game.start()
+    pygame.quit()
+
+
+if __name__ == '__main__':
+    main()
