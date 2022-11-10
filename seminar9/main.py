@@ -171,6 +171,8 @@ def init():
     clock = pygame.time.Clock()
     return (screen, font_style, clock)
 
+
+
 def main():
     """Main function"""
     screen, font_style, clock = init()
